@@ -33,8 +33,8 @@
 			<source src="renxi.mp3" type="audio/mpeg">
 			<source src="renxi.mp3" type="audio/mp3">
 		</audio>
-		<div id="musicControl" style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: rgba(255,255,255,0.8); padding: 10px; border-radius: 5px; cursor: pointer; font-size: 14px; display: none;">
-			🔇 点击暂停音乐
+		<div id="musicControl" style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: rgba(255,255,255,0.8); padding: 10px; border-radius: 5px; cursor: pointer; font-size: 14px;">
+			🎵 点击播放音乐
 		</div>
 		<div id="main">
 			<div id="error">本页面采用HTML5编辑，目前您的浏览器无法显示，请换成谷歌(<a href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh-CN&brand=CHMI">Chrome</a>)或者火狐(<a href="http://firefox.com.cn/download/">Firefox</a>)浏览器，或者其他游览器的最新版本。</div>
@@ -226,29 +226,29 @@
 				// 音乐控制按钮点击事件
 				musicControl.addEventListener('click', function() {
 					if (isPlaying) {
-						audio.pause();
-						musicControl.innerHTML = '🎵 点击播放音乐';
-						isPlaying = false;
-					} else {
+					audio.pause();
+					musicControl.innerHTML = '🎵 点击播放音乐';
+					isPlaying = false;
+				} else {
+					audio.play().then(function() {
+						musicControl.innerHTML = '🔇 点击暂停音乐';
+						isPlaying = true;
+					}).catch(function(error) {
+						console.log('音频播放失败:', error);
+					});
+				}
+				});
+				
+				// 全局变量，供canvas点击事件使用
+				window.startMusic = function() {
+					if (!isPlaying) {
 						audio.play().then(function() {
 							musicControl.innerHTML = '🔇 点击暂停音乐';
 							isPlaying = true;
 						}).catch(function(error) {
 							console.log('音频播放失败:', error);
-							musicControl.innerHTML = '❌ 音频加载失败';
 						});
 					}
-				});
-				
-				// 全局变量，供canvas点击事件使用
-				window.startMusic = function() {
-					audio.play().then(function() {
-						musicControl.innerHTML = '🔇 点击暂停音乐';
-						musicControl.style.display = 'block';
-						isPlaying = true;
-					}).catch(function(error) {
-						console.log('音频播放失败:', error);
-					});
 				};
 				
 				// 移除自动播放逻辑，改为等待用户点击爱心
